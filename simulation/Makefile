@@ -33,3 +33,12 @@ clean:
 	@rm -rf xsim.dir/ .Xil/
 	@rm -f xvlog.log xvlog.pb xelab.log xelab.pb xsim.log xsim.jou xsim.pb
 	@rm -f pipeline.vcd
+	@rm -f *.backup
+	@rm -f simulation_results*.txt
+	@rm -f *.log
+	@rm -f *.jou
+	@rm -f *.str	
+	@rm -f *.wdb
+	@rm -f stdout
+	@rm -f *.txt
+

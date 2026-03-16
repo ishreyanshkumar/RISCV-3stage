@@ -39,4 +39,9 @@ simulation/xsim_cfg.tcl~
 *~
 *.backup
 *.backup.*
+*.str
+*.wdb
+stdout
+*.hex
+*.bin
 .DS_Store
