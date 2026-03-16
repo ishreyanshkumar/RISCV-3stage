@@ -37,4 +37,6 @@ simulation/xsim_cfg.tcl~
 *.vcd
 *.txt
 *~
+*.backup
+*.backup.*
 .DS_Store
