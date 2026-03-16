@@ -1,0 +1,11 @@
+0.7
+2020.2
+Nov 14 2025
+19:37:27
+D:/Qode/Verilog/RISCV_Three_Stage/modules/IF_ID.v,1773692481,verilog,,,D:/Qode/Verilog/RISCV_Three_Stage/modules/opcode.vh,IF_ID;id_ex_reg,,,,,,,,
+D:/Qode/Verilog/RISCV_Three_Stage/modules/execute.v,1773692404,verilog,,,D:/Qode/Verilog/RISCV_Three_Stage/modules/opcode.vh,ex_mem_wb_reg;execute,,,,,,,,
+D:/Qode/Verilog/RISCV_Three_Stage/modules/memory.v,1773693179,verilog,,,,data_mem;instr_mem,,,,,,,,
+D:/Qode/Verilog/RISCV_Three_Stage/modules/opcode.vh,1773690080,verilog,,,,,,,,,,,,
+D:/Qode/Verilog/RISCV_Three_Stage/modules/pipeline.v,1773692624,verilog,,D:/Qode/Verilog/RISCV_Three_Stage/modules/tb_pipeline.v,D:/Qode/Verilog/RISCV_Three_Stage/modules/IF_ID.v;D:/Qode/Verilog/RISCV_Three_Stage/modules/execute.v;D:/Qode/Verilog/RISCV_Three_Stage/modules/memory.v;D:/Qode/Verilog/RISCV_Three_Stage/modules/wb.v,pipe,,,../modules,,,,,
+D:/Qode/Verilog/RISCV_Three_Stage/modules/tb_pipeline.v,1773690942,verilog,,D:/Qode/Verilog/RISCV_Three_Stage/modules/memory.v,,tb_pipeline,,,../modules,,,,,
+D:/Qode/Verilog/RISCV_Three_Stage/modules/wb.v,1773692427,verilog,,,D:/Qode/Verilog/RISCV_Three_Stage/modules/opcode.vh,wb,,,,,,,,

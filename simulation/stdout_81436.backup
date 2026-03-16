@@ -1,0 +1,32 @@
+#-----------------------------------------------------------
+# xsim v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Thu Mar 12 19:02:57 2026
+# Process ID         : 81436
+# Current directory  : C:/Users/user/OneDrive/Desktop/IIT - G ALL MATERIAL/SEM - 4/CS 224 - Hardware Lab/RISCV_Three_Stage/simulation
+# Command line       : xsim.exe -log stdout -mode tcl -source {xsim.dir/riscv_sim/xsim_script.tcl}
+# Log file           : C:/Users/user/OneDrive/Desktop/IIT - G ALL MATERIAL/SEM - 4/CS 224 - Hardware Lab/RISCV_Three_Stage/simulation/stdout
+# Journal file       : C:/Users/user/OneDrive/Desktop/IIT - G ALL MATERIAL/SEM - 4/CS 224 - Hardware Lab/RISCV_Three_Stage/simulation\xsim.jou
+# Running On         : LAPTOP-Q99HVG6S
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) i7-10870H CPU @ 2.20GHz
+# CPU Frequency      : 2208 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 16944 MB
+# Swap memory        : 12771 MB
+# Total Virtual      : 29715 MB
+# Available Virtual  : 3036 MB
+#-----------------------------------------------------------
+source xsim.dir/riscv_sim/xsim_script.tcl
+# xsim {riscv_sim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+WARNING: File C:UsersuserOneDriveDesktopIIT - G ALL MATERIALSEM - 4CS 224 - Hardware LabRISCV_Three_Stagemem_generatorimem_dmemimem.hex referenced on C:/Users/user/OneDrive/Desktop/IIT - G ALL MATERIAL/SEM - 4/CS 224 - Hardware Lab/RISCV_Three_Stage/modules/wb.v at line 50 cannot be opened for reading. Please ensure that this file is available in the current working directory or parent directory of xsim.dir location specified via -xsimdir switch.
+WARNING: File C:UsersuserOneDriveDesktopIIT - G ALL MATERIALSEM - 4CS 224 - Hardware LabRISCV_Three_Stagemem_generatorimem_dmemdmem.hex referenced on C:/Users/user/OneDrive/Desktop/IIT - G ALL MATERIAL/SEM - 4/CS 224 - Hardware Lab/RISCV_Three_Stage/modules/wb.v at line 50 cannot be opened for reading. Please ensure that this file is available in the current working directory or parent directory of xsim.dir location specified via -xsimdir switch.
+$finish called at time : 20 us : File "C:/Users/user/OneDrive/Desktop/IIT - G ALL MATERIAL/SEM - 4/CS 224 - Hardware Lab/RISCV_Three_Stage/modules/tb_pipeline.v" Line 112
+exit
+INFO: [Common 17-206] Exiting xsim at Thu Mar 12 19:02:59 2026...

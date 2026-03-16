@@ -1,0 +1,30 @@
+#-----------------------------------------------------------
+# xsim v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Tue Mar 17 01:24:26 2026
+# Process ID         : 21964
+# Current directory  : D:/Qode/Verilog/RISCV_Three_Stage/simulation
+# Command line       : xsim.exe -log stdout -mode tcl -source {xsim.dir/riscv_sim/xsim_script.tcl}
+# Log file           : D:/Qode/Verilog/RISCV_Three_Stage/simulation/stdout
+# Journal file       : D:/Qode/Verilog/RISCV_Three_Stage/simulation\xsim.jou
+# Running On         : SHREYANSH
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : AMD Ryzen 5 3550H with Radeon Vega Mobile Gfx  
+# CPU Frequency      : 2096 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 23491 MB
+# Swap memory        : 11811 MB
+# Total Virtual      : 35302 MB
+# Available Virtual  : 12645 MB
+#-----------------------------------------------------------
+source xsim.dir/riscv_sim/xsim_script.tcl
+# xsim {riscv_sim} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+$finish called at time : 785 ns : File "D:/Qode/Verilog/RISCV_Three_Stage/modules/tb_pipeline.v" Line 117
+exit
+INFO: [Common 17-206] Exiting xsim at Tue Mar 17 01:24:32 2026...

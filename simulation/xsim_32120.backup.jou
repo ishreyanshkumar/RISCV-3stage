@@ -1,0 +1,25 @@
+#-----------------------------------------------------------
+# xsim v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Tue Mar 17 02:03:12 2026
+# Process ID         : 32120
+# Current directory  : D:/Qode/Verilog/RISCV_Three_Stage/simulation
+# Command line       : xsim.exe -log stdout -mode tcl -source {xsim.dir/riscv_sim/xsim_script.tcl}
+# Log file           : D:/Qode/Verilog/RISCV_Three_Stage/simulation/stdout
+# Journal file       : D:/Qode/Verilog/RISCV_Three_Stage/simulation\xsim.jou
+# Running On         : SHREYANSH
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : AMD Ryzen 5 3550H with Radeon Vega Mobile Gfx  
+# CPU Frequency      : 2096 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 23491 MB
+# Swap memory        : 11811 MB
+# Total Virtual      : 35302 MB
+# Available Virtual  : 12753 MB
+#-----------------------------------------------------------
+source xsim.dir/riscv_sim/xsim_script.tcl
+source xsim_cfg.tcl

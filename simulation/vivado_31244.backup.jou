@@ -1,0 +1,27 @@
+#-----------------------------------------------------------
+# Vivado v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Tue Mar 17 01:33:47 2026
+# Process ID         : 31244
+# Current directory  : D:/Qode/Verilog/RISCV_Three_Stage/simulation
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent34172 D:\Qode\Verilog\RISCV_Three_Stage\simulation\riscv_sim.wdb
+# Log file           : D:/Qode/Verilog/RISCV_Three_Stage/simulation/vivado.log
+# Journal file       : D:/Qode/Verilog/RISCV_Three_Stage/simulation\vivado.jou
+# Running On         : SHREYANSH
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : AMD Ryzen 5 3550H with Radeon Vega Mobile Gfx  
+# CPU Frequency      : 2096 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 23491 MB
+# Swap memory        : 11811 MB
+# Total Virtual      : 35302 MB
+# Available Virtual  : 12698 MB
+#-----------------------------------------------------------
+start_gui
+open_wave_database {D:\Qode\Verilog\RISCV_Three_Stage\simulation\riscv_sim.wdb}
+add_wave {{/tb_pipeline}} 
+close_sim
