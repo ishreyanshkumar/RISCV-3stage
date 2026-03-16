@@ -40,5 +40,5 @@ clean:
 	@rm -f *.str	
 	@rm -f *.wdb
 	@rm -f stdout
-	@rm -f *.txt
+
 

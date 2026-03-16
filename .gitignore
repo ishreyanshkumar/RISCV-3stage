@@ -2,15 +2,6 @@
 node_modules/
 npm-debug.log
 
-# RISC-V Toolchain Compiled Outputs
-mem_generator/*.elf
-mem_generator/*.bin
-mem_generator/*.hex
-mem_generator/*.dis
-mem_generator/imem_dmem/*.bin
-mem_generator/imem_dmem/*.hex
-mem_generator/imem_dmem/*.dis
-
 # Vivado Simulation Outputs
 simulation/xsim.dir/
 simulation/.Xil/
@@ -35,7 +26,6 @@ simulation/xsim_cfg.tcl~
 *.jou
 *.pb
 *.vcd
-*.txt
 *~
 *.backup
 *.backup.*
