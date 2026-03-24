@@ -294,7 +294,7 @@
 
 <div class="page-header">
   <span class="page-title">RISC-V 4-Stage Pipeline — Full Signal Timing Diagram</span>
-  <span class="page-sub">14 cycles · IF/ID · EX · WB · all instruction types · all hazard cases</span>
+  <span class="page-sub">13 cycles · IF/ID · EX · WB · all instruction types · all hazard cases</span>
 </div>
 
 <div class="legend">
@@ -305,8 +305,7 @@
   <div class="leg"><div class="lb" style="background:rgba(167,139,250,0.2);color:#b9a0fc">JAL</div>JAL/JALR</div>
   <div class="leg"><div class="lb" style="background:rgba(96,165,250,0.2);color:#93c5fd">LUI</div>LUI/AUIPC</div>
   <div class="leg"><div class="lb" style="background:rgba(58,68,85,0.5);color:#4a5568">NOP</div>NOP / bubble</div>
-  <div class="leg"><div class="lb" style="background:rgba(224,80,80,0.2);color:#f07070">STL</div>Stall cycle</div>
-</div>
+  </div>
 
 <div class="timing-wrap">
 <table class="timing">
@@ -317,22 +316,20 @@
     <th class="cyc">C1</th>
     <th class="cyc">C2</th>
     <th class="cyc">C3</th>
-    <th class="cyc stall-cyc">C4 ⚠</th>
+    <th class="cyc">C4</th>
     <th class="cyc">C5</th>
-    <th class="cyc">C6</th>
-    <th class="cyc branch-cyc">C7 ⚡</th>
+    <th class="cyc branch-cyc">C6 ⚡</th>
+    <th class="cyc branch-cyc">C7 ✕</th>
     <th class="cyc branch-cyc">C8 ✕</th>
-    <th class="cyc branch-cyc">C9 ✕</th>
-    <th class="cyc jal-cyc">C10</th>
-    <th class="cyc jal-cyc">C11 ⚡</th>
-    <th class="cyc jal-cyc">C12 ✕</th>
+    <th class="cyc jal-cyc">C9</th>
+    <th class="cyc jal-cyc">C10 ⚡</th>
+    <th class="cyc jal-cyc">C11 ✕</th>
+    <th class="cyc">C12</th>
     <th class="cyc">C13</th>
-    <th class="cyc">C14</th>
   </tr>
   <tr class="scenario-row">
     <th></th><th></th>
-    <th colspan="3" class="sc-norm">normal flow</th>
-    <th colspan="2" class="sc-stall">load-use stall</th>
+    <th colspan="4" class="sc-norm">normal / fwd</th>
     <th colspan="4" class="sc-br">branch taken → 2-cycle flush</th>
     <th colspan="3" class="sc-jal">JAL redirect → 1-cycle flush</th>
     <th colspan="2" class="sc-sw">SW · LUI · drain</th>
@@ -343,722 +340,162 @@
 <!-- ══════════════════════════════════════════════════════
      PIPE / FETCH SIGNALS
      ══════════════════════════════════════════════════════ -->
-<tr class="section-hdr s-pipe"><td colspan="16">PIPE — Fetch &amp; Global Control</td></tr>
+<tr class="section-hdr s-pipe"><td colspan="15">PIPE — Fetch &amp; Global Control</td></tr>
 
 <!-- CLK -->
 <tr class="sig-row clk-row">
-  <td class="lbl-col">PIPE</td>
-  <td class="sig-col"><span class="signame">clk</span><span class="sigdesc">system clock</span></td>
-  <!-- 14 cycles, show clk waveform in each cell -->
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk c-stall"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-  <td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td>
-</tr>
+  <td class="lbl-col">PIPE</td><td class="sig-col"><span class="signame">clk</span><span class="sigdesc">system clock</span></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk c-lo"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td><td class="cell c-clk"><div class="clk-wave"><svg viewBox="0 0 64 20" preserveAspectRatio="none"><polyline fill="none" stroke="#00c896" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" points="0,16 0,4 32,4 32,16 64,16"/></svg></div></td></tr>
 
 <!-- fetch_pc -->
 <tr class="sig-row">
-  <td class="lbl-col">PIPE</td>
-  <td class="sig-col"><span class="signame">fetch_pc</span><span class="sigdesc">addr presented to IMEM</span></td>
-  <td class="cell c-alu"><span class="v">0x00</span><span class="sv">→ADD</span></td>
-  <td class="cell c-load"><span class="v">0x04</span><span class="sv">→LW</span></td>
-  <td class="cell c-branch"><span class="v">0x08</span><span class="sv">→BEQ</span></td>
-  <td class="cell c-stall"><span class="v">0x08</span><span class="sv">frozen</span></td>
-  <td class="cell c-branch"><span class="v">0x08</span><span class="sv">re-issue</span></td>
-  <td class="cell c-alu"><span class="v">0x0C</span><span class="sv">→XOR</span></td>
-  <td class="cell c-alu"><span class="v">0x10</span><span class="sv">→SLTU</span></td>
-  <td class="cell c-stall"><span class="v">0x40</span><span class="sv">redirect!</span></td>
-  <td class="cell c-stall"><span class="v">0x44</span><span class="sv">br_stall</span></td>
-  <td class="cell c-jal"><span class="v">0x40</span><span class="sv">→JAL</span></td>
-  <td class="cell c-alu"><span class="v">0x44</span><span class="sv">→ADDI</span></td>
-  <td class="cell c-stall"><span class="v">0x80</span><span class="sv">JAL redirect!</span></td>
-  <td class="cell c-store"><span class="v">0x80</span><span class="sv">→SW</span></td>
-  <td class="cell c-lui"><span class="v">0x84</span><span class="sv">→LUI</span></td>
-</tr>
+  <td class="lbl-col">PIPE</td><td class="sig-col"><span class="signame">fetch_pc</span><span class="sigdesc">addr presented to IMEM</span></td><td class="cell c-alu"><span class="v">0x00</span><span class="sv">→ADD</span></td><td class="cell c-load"><span class="v">0x04</span><span class="sv">→LW</span></td><td class="cell c-branch"><span class="v">0x08</span><span class="sv">→BEQ</span></td><td class="cell c-alu"><span class="v">0x0C</span><span class="sv">→XOR</span></td><td class="cell c-alu"><span class="v">0x10</span><span class="sv">→SLTU</span></td><td class="cell c-lo"><span class="v">0x40</span><span class="sv">redirect!</span></td><td class="cell c-lo"><span class="v">0x44</span><span class="sv">br_stall</span></td><td class="cell c-jal"><span class="v">0x40</span><span class="sv">→JAL</span></td><td class="cell c-alu"><span class="v">0x44</span><span class="sv">→ADDI</span></td><td class="cell c-lo"><span class="v">0x80</span><span class="sv">JAL redirect!</span></td><td class="cell c-store"><span class="v">0x80</span><span class="sv">→SW</span></td><td class="cell c-lui"><span class="v">0x84</span><span class="sv">→LUI</span></td><td class="cell c-lui"><span class="v">0x84</span><span class="sv">→LUI</span></td></tr>
 
 <!-- inst_mem_read_data -->
 <tr class="sig-row">
-  <td class="lbl-col">IMEM</td>
-  <td class="sig-col"><span class="signame">inst_mem_read_data</span><span class="sigdesc">32-bit raw from IMEM</span></td>
-  <td class="cell c-alu"><span class="v">ADD</span><span class="sv">0x00333333</span></td>
-  <td class="cell c-load"><span class="v">LW</span><span class="sv">0x00412083</span></td>
-  <td class="cell c-branch"><span class="v">BEQ</span><span class="sv">0x00208463</span></td>
-  <td class="cell c-stall"><span class="v">BEQ</span><span class="sv">held/stall</span></td>
-  <td class="cell c-branch"><span class="v">BEQ</span><span class="sv">re-fetched</span></td>
-  <td class="cell c-alu"><span class="v">XOR</span><span class="sv">0x0040C333</span></td>
-  <td class="cell c-alu"><span class="v">SLTU</span><span class="sv">0x0030B333</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td>
-  <td class="cell c-jal"><span class="v">JAL</span><span class="sv">0x03C000EF</span></td>
-  <td class="cell c-alu"><span class="v">ADDI</span><span class="sv">0x00508093</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td>
-  <td class="cell c-store"><span class="v">SW</span><span class="sv">0x00512023</span></td>
-  <td class="cell c-lui"><span class="v">LUI</span><span class="sv">0x000A4537</span></td>
-</tr>
+  <td class="lbl-col">IMEM</td><td class="sig-col"><span class="signame">inst_mem_read_data</span><span class="sigdesc">32-bit raw from IMEM</span></td><td class="cell c-alu"><span class="v">ADD</span><span class="sv">0x00333333</span></td><td class="cell c-load"><span class="v">LW</span><span class="sv">0x00412083</span></td><td class="cell c-branch"><span class="v">BEQ</span><span class="sv">0x00208463</span></td><td class="cell c-alu"><span class="v">XOR</span><span class="sv">0x0040C333</span></td><td class="cell c-alu"><span class="v">SLTU</span><span class="sv">0x0030B333</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td><td class="cell c-jal"><span class="v">JAL</span><span class="sv">0x03C000EF</span></td><td class="cell c-alu"><span class="v">ADDI</span><span class="sv">0x00508093</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td><td class="cell c-store"><span class="v">SW</span><span class="sv">0x00512023</span></td><td class="cell c-lui"><span class="v">LUI</span><span class="sv">0x000A4537</span></td><td class="cell c-lui"><span class="v">LUI</span><span class="sv">0x000A4537</span></td></tr>
 
 <!-- stall_read -->
 <tr class="sig-row">
-  <td class="lbl-col">PIPE</td>
-  <td class="sig-col"><span class="signame">stall_read</span><span class="sigdesc">master stall flag</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">reset</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-stall"><span class="v">1</span><span class="sv">LW hazard</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-</tr>
+  <td class="lbl-col">PIPE</td><td class="sig-col"><span class="signame">stall_read</span><span class="sigdesc">master stall flag</span></td><td class="cell c-hi"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td></tr>
 
 <!-- ══════════════════════════════════════════════════════
      IF / ID STAGE SIGNALS
      ══════════════════════════════════════════════════════ -->
-<tr class="section-hdr s-ifid"><td colspan="16">IF / ID — Instruction Fetch &amp; Decode Stage</td></tr>
+<tr class="section-hdr s-ifid"><td colspan="15">IF / ID — Instruction Fetch &amp; Decode Stage</td></tr>
 
 <!-- instruction in ID -->
 <tr class="sig-row">
-  <td class="lbl-col">ID</td>
-  <td class="sig-col"><span class="signame">instruction</span><span class="sigdesc">decoded instr (NOP if stalled)</span></td>
-  <td class="cell c-empty"><span class="v">─</span><span class="sv">reset</span></td>
-  <td class="cell c-alu"><span class="v">ADD</span><span class="sv">r-type</span></td>
-  <td class="cell c-load"><span class="v">LW</span><span class="sv">i-type</span></td>
-  <td class="cell c-stall"><span class="v">NOP inj</span><span class="sv">bubble</span></td>
-  <td class="cell c-load"><span class="v">LW</span><span class="sv">replayed</span></td>
-  <td class="cell c-branch"><span class="v">BEQ</span><span class="sv">b-type</span></td>
-  <td class="cell c-alu"><span class="v">XOR</span><span class="sv">r-type</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td>
-  <td class="cell c-alu"><span class="v">SLTU</span><span class="sv">r-type</span></td>
-  <td class="cell c-jal"><span class="v">JAL</span><span class="sv">j-type</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td>
-  <td class="cell c-alu"><span class="v">ADDI</span><span class="sv">i-type</span></td>
-  <td class="cell c-store"><span class="v">SW</span><span class="sv">s-type</span></td>
-</tr>
+  <td class="lbl-col">ID</td><td class="sig-col"><span class="signame">instruction</span><span class="sigdesc">decoded instr (NOP if stalled)</span></td><td class="cell c-empty"><span class="v">─</span><span class="sv">reset</span></td><td class="cell c-alu"><span class="v">ADD</span><span class="sv">r-type</span></td><td class="cell c-load"><span class="v">LW</span><span class="sv">i-type</span></td><td class="cell c-branch"><span class="v">BEQ</span><span class="sv">b-type</span></td><td class="cell c-alu"><span class="v">XOR</span><span class="sv">r-type</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td><td class="cell c-alu"><span class="v">SLTU</span><span class="sv">r-type</span></td><td class="cell c-jal"><span class="v">JAL</span><span class="sv">j-type</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td><td class="cell c-alu"><span class="v">ADDI</span><span class="sv">i-type</span></td><td class="cell c-store"><span class="v">SW</span><span class="sv">s-type</span></td><td class="cell c-store"><span class="v">SW</span><span class="sv">s-type</span></td></tr>
 
 <!-- inst_fetch_pc -->
 <tr class="sig-row">
-  <td class="lbl-col">pipe/ID</td>
-  <td class="sig-col"><span class="signame">inst_fetch_pc</span><span class="sigdesc">PC of instr in IF/ID reg</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">0x00</span><span class="sv">ADD pc</span></td>
-  <td class="cell c-load"><span class="v">0x04</span><span class="sv">LW pc</span></td>
-  <td class="cell c-stall"><span class="v">0x04</span><span class="sv">held</span></td>
-  <td class="cell c-load"><span class="v">0x04</span><span class="sv">LW replay</span></td>
-  <td class="cell c-branch"><span class="v">0x08</span><span class="sv">BEQ pc</span></td>
-  <td class="cell c-alu"><span class="v">0x0C</span><span class="sv">XOR pc</span></td>
-  <td class="cell c-nop"><span class="v">0x10</span><span class="sv">flushed</span></td>
-  <td class="cell c-nop"><span class="v">0x14</span><span class="sv">flushed</span></td>
-  <td class="cell c-alu"><span class="v">0x10</span><span class="sv">SLTU pc</span></td>
-  <td class="cell c-jal"><span class="v">0x40</span><span class="sv">JAL pc</span></td>
-  <td class="cell c-nop"><span class="v">0x44</span><span class="sv">flushed</span></td>
-  <td class="cell c-alu"><span class="v">0x44</span><span class="sv">ADDI pc</span></td>
-  <td class="cell c-store"><span class="v">0x80</span><span class="sv">SW pc</span></td>
-</tr>
+  <td class="lbl-col">pipe/ID</td><td class="sig-col"><span class="signame">inst_fetch_pc</span><span class="sigdesc">PC of instr in IF/ID reg</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">0x00</span><span class="sv">ADD pc</span></td><td class="cell c-load"><span class="v">0x04</span><span class="sv">LW pc</span></td><td class="cell c-branch"><span class="v">0x08</span><span class="sv">BEQ pc</span></td><td class="cell c-alu"><span class="v">0x0C</span><span class="sv">XOR pc</span></td><td class="cell c-nop"><span class="v">0x10</span><span class="sv">flushed</span></td><td class="cell c-nop"><span class="v">0x14</span><span class="sv">flushed</span></td><td class="cell c-alu"><span class="v">0x10</span><span class="sv">SLTU pc</span></td><td class="cell c-jal"><span class="v">0x40</span><span class="sv">JAL pc</span></td><td class="cell c-nop"><span class="v">0x44</span><span class="sv">flushed</span></td><td class="cell c-alu"><span class="v">0x44</span><span class="sv">ADDI pc</span></td><td class="cell c-store"><span class="v">0x80</span><span class="sv">SW pc</span></td><td class="cell c-store"><span class="v">0x80</span><span class="sv">SW pc</span></td></tr>
 
 <!-- src1_select -->
 <tr class="sig-row">
-  <td class="lbl-col">ID</td>
-  <td class="sig-col"><span class="signame">src1_select</span><span class="sigdesc">rs1 register index [4:0]</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">x1</span><span class="sv">ADD rs1</span></td>
-  <td class="cell c-load"><span class="v">x4</span><span class="sv">LW base</span></td>
-  <td class="cell c-stall"><span class="v">x4</span><span class="sv">stall</span></td>
-  <td class="cell c-load"><span class="v">x4</span><span class="sv">replayed</span></td>
-  <td class="cell c-branch"><span class="v">x2</span><span class="sv">BEQ rs1</span></td>
-  <td class="cell c-alu"><span class="v">x4</span><span class="sv">XOR rs1</span></td>
-  <td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">x3</span><span class="sv">SLTU rs1</span></td>
-  <td class="cell c-jal"><span class="v">x0</span><span class="sv">JAL(pc)</span></td>
-  <td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">x1</span><span class="sv">ADDI rs1</span></td>
-  <td class="cell c-store"><span class="v">x5</span><span class="sv">SW base</span></td>
-</tr>
+  <td class="lbl-col">ID</td><td class="sig-col"><span class="signame">src1_select</span><span class="sigdesc">rs1 register index [4:0]</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">x1</span><span class="sv">ADD rs1</span></td><td class="cell c-load"><span class="v">x4</span><span class="sv">LW base</span></td><td class="cell c-branch"><span class="v">x2</span><span class="sv">BEQ rs1</span></td><td class="cell c-alu"><span class="v">x4</span><span class="sv">XOR rs1</span></td><td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td><td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">x3</span><span class="sv">SLTU rs1</span></td><td class="cell c-jal"><span class="v">x0</span><span class="sv">JAL(pc)</span></td><td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">x1</span><span class="sv">ADDI rs1</span></td><td class="cell c-store"><span class="v">x5</span><span class="sv">SW base</span></td><td class="cell c-store"><span class="v">x5</span><span class="sv">SW base</span></td></tr>
 
 <!-- src2_select -->
 <tr class="sig-row">
-  <td class="lbl-col">ID</td>
-  <td class="sig-col"><span class="signame">src2_select</span><span class="sigdesc">rs2 register index [4:0]</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">x2</span><span class="sv">ADD rs2</span></td>
-  <td class="cell c-load"><span class="v">x0</span><span class="sv">imm(no rs2)</span></td>
-  <td class="cell c-stall"><span class="v">x0</span><span class="sv">stall</span></td>
-  <td class="cell c-load"><span class="v">x0</span><span class="sv">replayed</span></td>
-  <td class="cell c-branch"><span class="v">x3</span><span class="sv">BEQ rs2</span></td>
-  <td class="cell c-alu"><span class="v">x5</span><span class="sv">XOR rs2</span></td>
-  <td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">x4</span><span class="sv">SLTU rs2</span></td>
-  <td class="cell c-jal"><span class="v">x0</span><span class="sv">no rs2</span></td>
-  <td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">x0</span><span class="sv">imm</span></td>
-  <td class="cell c-store"><span class="v">x6</span><span class="sv">SW data</span></td>
-</tr>
+  <td class="lbl-col">ID</td><td class="sig-col"><span class="signame">src2_select</span><span class="sigdesc">rs2 register index [4:0]</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">x2</span><span class="sv">ADD rs2</span></td><td class="cell c-load"><span class="v">x0</span><span class="sv">imm(no rs2)</span></td><td class="cell c-branch"><span class="v">x3</span><span class="sv">BEQ rs2</span></td><td class="cell c-alu"><span class="v">x5</span><span class="sv">XOR rs2</span></td><td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td><td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">x4</span><span class="sv">SLTU rs2</span></td><td class="cell c-jal"><span class="v">x0</span><span class="sv">no rs2</span></td><td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">x0</span><span class="sv">imm</span></td><td class="cell c-store"><span class="v">x6</span><span class="sv">SW data</span></td><td class="cell c-store"><span class="v">x6</span><span class="sv">SW data</span></td></tr>
 
 <!-- dest_reg_sel -->
 <tr class="sig-row">
-  <td class="lbl-col">ID</td>
-  <td class="sig-col"><span class="signame">dest_reg_sel</span><span class="sigdesc">rd register index [4:0]</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">x3</span><span class="sv">ADD rd</span></td>
-  <td class="cell c-load"><span class="v">x5</span><span class="sv">LW rd</span></td>
-  <td class="cell c-stall"><span class="v">x5</span><span class="sv">stall</span></td>
-  <td class="cell c-load"><span class="v">x5</span><span class="sv">replayed</span></td>
-  <td class="cell c-branch"><span class="v">x0</span><span class="sv">no WB</span></td>
-  <td class="cell c-alu"><span class="v">x6</span><span class="sv">XOR rd</span></td>
-  <td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">x7</span><span class="sv">SLTU rd</span></td>
-  <td class="cell c-jal"><span class="v">x1</span><span class="sv">link reg</span></td>
-  <td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">x1</span><span class="sv">ADDI rd</span></td>
-  <td class="cell c-store"><span class="v">x0</span><span class="sv">no WB</span></td>
-</tr>
+  <td class="lbl-col">ID</td><td class="sig-col"><span class="signame">dest_reg_sel</span><span class="sigdesc">rd register index [4:0]</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">x3</span><span class="sv">ADD rd</span></td><td class="cell c-load"><span class="v">x5</span><span class="sv">LW rd</span></td><td class="cell c-branch"><span class="v">x0</span><span class="sv">no WB</span></td><td class="cell c-alu"><span class="v">x6</span><span class="sv">XOR rd</span></td><td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td><td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">x7</span><span class="sv">SLTU rd</span></td><td class="cell c-jal"><span class="v">x1</span><span class="sv">link reg</span></td><td class="cell c-nop"><span class="v">x0</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">x1</span><span class="sv">ADDI rd</span></td><td class="cell c-store"><span class="v">x0</span><span class="sv">no WB</span></td><td class="cell c-store"><span class="v">x0</span><span class="sv">no WB</span></td></tr>
 
 <!-- alu_operation from decode -->
 <tr class="sig-row">
-  <td class="lbl-col">ID</td>
-  <td class="sig-col"><span class="signame">alu_operation</span><span class="sigdesc">func3 3-bit ALU opcode</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">ADD</span><span class="sv">000</span></td>
-  <td class="cell c-load"><span class="v">ADD</span><span class="sv">addr calc</span></td>
-  <td class="cell c-stall"><span class="v">ADD</span><span class="sv">stall</span></td>
-  <td class="cell c-load"><span class="v">ADD</span><span class="sv">replayed</span></td>
-  <td class="cell c-branch"><span class="v">BEQ</span><span class="sv">000</span></td>
-  <td class="cell c-alu"><span class="v">XOR</span><span class="sv">100</span></td>
-  <td class="cell c-nop"><span class="v">─</span><span class="sv">NOP</span></td>
-  <td class="cell c-nop"><span class="v">─</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">SLTU</span><span class="sv">011</span></td>
-  <td class="cell c-jal"><span class="v">ADD</span><span class="sv">link</span></td>
-  <td class="cell c-nop"><span class="v">─</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">ADD</span><span class="sv">000</span></td>
-  <td class="cell c-store"><span class="v">ADD</span><span class="sv">addr</span></td>
-</tr>
+  <td class="lbl-col">ID</td><td class="sig-col"><span class="signame">alu_operation</span><span class="sigdesc">func3 3-bit ALU opcode</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">ADD</span><span class="sv">000</span></td><td class="cell c-load"><span class="v">ADD</span><span class="sv">addr calc</span></td><td class="cell c-branch"><span class="v">BEQ</span><span class="sv">000</span></td><td class="cell c-alu"><span class="v">XOR</span><span class="sv">100</span></td><td class="cell c-nop"><span class="v">─</span><span class="sv">NOP</span></td><td class="cell c-nop"><span class="v">─</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">SLTU</span><span class="sv">011</span></td><td class="cell c-jal"><span class="v">ADD</span><span class="sv">link</span></td><td class="cell c-nop"><span class="v">─</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">ADD</span><span class="sv">000</span></td><td class="cell c-store"><span class="v">ADD</span><span class="sv">addr</span></td><td class="cell c-store"><span class="v">ADD</span><span class="sv">addr</span></td></tr>
 
 <!-- immediate_sel -->
 <tr class="sig-row">
-  <td class="lbl-col">ID→EX</td>
-  <td class="sig-col"><span class="signame">immediate_sel</span><span class="sigdesc">1=imm  0=reg for ALU src2</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">reg-reg</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">imm(LW)</span></td>
-  <td class="cell c-stall"><span class="v">1</span><span class="sv">stall</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">imm(LW)</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">imm(BEQ)</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">reg-reg</span></td>
-  <td class="cell c-nop"><span class="v">0</span><span class="sv">NOP</span></td>
-  <td class="cell c-nop"><span class="v">0</span><span class="sv">NOP</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">reg-reg</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">offset</span></td>
-  <td class="cell c-nop"><span class="v">0</span><span class="sv">NOP</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">imm</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">imm(SW)</span></td>
-</tr>
+  <td class="lbl-col">ID→EX</td><td class="sig-col"><span class="signame">immediate_sel</span><span class="sigdesc">1=imm  0=reg for ALU src2</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-lo"><span class="v">0</span><span class="sv">reg-reg</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">imm(LW)</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">imm(BEQ)</span></td><td class="cell c-lo"><span class="v">0</span><span class="sv">reg-reg</span></td><td class="cell c-nop"><span class="v">0</span><span class="sv">NOP</span></td><td class="cell c-nop"><span class="v">0</span><span class="sv">NOP</span></td><td class="cell c-lo"><span class="v">0</span><span class="sv">reg-reg</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">offset</span></td><td class="cell c-nop"><span class="v">0</span><span class="sv">NOP</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">imm</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">imm(SW)</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">imm(SW)</span></td></tr>
 
 <!-- arithsubtype -->
 <tr class="sig-row">
-  <td class="lbl-col">ID→EX</td>
-  <td class="sig-col"><span class="signame">arithsubtype</span><span class="sigdesc">1=SUB/SRA  0=ADD/SRL</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">ADD</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-stall"><span class="v">0</span><span class="sv">stall</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-nop"><span class="v">0</span></td>
-  <td class="cell c-nop"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-nop"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-</tr>
+  <td class="lbl-col">ID→EX</td><td class="sig-col"><span class="signame">arithsubtype</span><span class="sigdesc">1=SUB/SRA  0=ADD/SRL</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-lo"><span class="v">0</span><span class="sv">ADD</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-nop"><span class="v">0</span></td><td class="cell c-nop"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-nop"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td></tr>
 
 <!-- mem_write flag -->
 <tr class="sig-row">
-  <td class="lbl-col">ID→EX</td>
-  <td class="sig-col"><span class="signame">mem_write</span><span class="sigdesc">1=store instr (SW/SH/SB)</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-stall"><span class="v">0</span><span class="sv">stall</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-nop"><span class="v">0</span></td>
-  <td class="cell c-nop"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-nop"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-store"><span class="v">1</span><span class="sv">SW!</span></td>
-</tr>
+  <td class="lbl-col">ID→EX</td><td class="sig-col"><span class="signame">mem_write</span><span class="sigdesc">1=store instr (SW/SH/SB)</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-nop"><span class="v">0</span></td><td class="cell c-nop"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-nop"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-store"><span class="v">1</span><span class="sv">SW!</span></td><td class="cell c-store"><span class="v">1</span><span class="sv">SW!</span></td></tr>
 
 <!-- mem_to_reg -->
 <tr class="sig-row">
-  <td class="lbl-col">ID→EX</td>
-  <td class="sig-col"><span class="signame">mem_to_reg</span><span class="sigdesc">1=load instr (LW/LH/LB)</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">LW</span></td>
-  <td class="cell c-stall"><span class="v">1</span><span class="sv">stall</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">LW replay</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-nop"><span class="v">0</span></td>
-  <td class="cell c-nop"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-nop"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-</tr>
+  <td class="lbl-col">ID→EX</td><td class="sig-col"><span class="signame">mem_to_reg</span><span class="sigdesc">1=load instr (LW/LH/LB)</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">LW</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-nop"><span class="v">0</span></td><td class="cell c-nop"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-nop"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td></tr>
 
 <!-- alu/lui/jal/jalr/branch decode flags -->
 <tr class="sig-row">
-  <td class="lbl-col">ID→EX</td>
-  <td class="sig-col"><span class="signame">alu/lui/jal/jalr/branch</span><span class="sigdesc">one-hot instr class flags</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">alu=1</span><span class="sv">r-type</span></td>
-  <td class="cell c-load"><span class="v">alu=1</span><span class="sv">load addr</span></td>
-  <td class="cell c-stall"><span class="v">stall</span></td>
-  <td class="cell c-load"><span class="v">alu=1</span><span class="sv">replay</span></td>
-  <td class="cell c-branch"><span class="v">branch=1</span><span class="sv">b-type</span></td>
-  <td class="cell c-alu"><span class="v">alu=1</span><span class="sv">r-type</span></td>
-  <td class="cell c-nop"><span class="v">all=0</span><span class="sv">NOP</span></td>
-  <td class="cell c-nop"><span class="v">all=0</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">alu=1</span><span class="sv">r-type</span></td>
-  <td class="cell c-jal"><span class="v">jal=1</span><span class="sv">j-type</span></td>
-  <td class="cell c-nop"><span class="v">all=0</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">alu=1</span><span class="sv">i-type</span></td>
-  <td class="cell c-store"><span class="v">alu=1</span><span class="sv">sw addr</span></td>
-</tr>
+  <td class="lbl-col">ID→EX</td><td class="sig-col"><span class="signame">alu/lui/jal/jalr/branch</span><span class="sigdesc">one-hot instr class flags</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">alu=1</span><span class="sv">r-type</span></td><td class="cell c-load"><span class="v">alu=1</span><span class="sv">load addr</span></td><td class="cell c-branch"><span class="v">branch=1</span><span class="sv">b-type</span></td><td class="cell c-alu"><span class="v">alu=1</span><span class="sv">r-type</span></td><td class="cell c-nop"><span class="v">all=0</span><span class="sv">NOP</span></td><td class="cell c-nop"><span class="v">all=0</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">alu=1</span><span class="sv">r-type</span></td><td class="cell c-jal"><span class="v">jal=1</span><span class="sv">j-type</span></td><td class="cell c-nop"><span class="v">all=0</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">alu=1</span><span class="sv">i-type</span></td><td class="cell c-store"><span class="v">alu=1</span><span class="sv">sw addr</span></td><td class="cell c-store"><span class="v">alu=1</span><span class="sv">sw addr</span></td></tr>
 
 <!-- illegal_inst -->
 <tr class="sig-row">
-  <td class="lbl-col">ID</td>
-  <td class="sig-col"><span class="signame">illegal_inst</span><span class="sigdesc">1 = unknown opcode</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-</tr>
+  <td class="lbl-col">ID</td><td class="sig-col"><span class="signame">illegal_inst</span><span class="sigdesc">1 = unknown opcode</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td></tr>
 
 <!-- ══════════════════════════════════════════════════════
      EXECUTE STAGE SIGNALS
      ══════════════════════════════════════════════════════ -->
-<tr class="section-hdr s-ex"><td colspan="16">EX — Execute Stage</td></tr>
+<tr class="section-hdr s-ex"><td colspan="15">EX — Execute Stage</td></tr>
 
 <!-- pc_w in EX -->
 <tr class="sig-row">
-  <td class="lbl-col">EX</td>
-  <td class="sig-col"><span class="signame">pc_w / pc</span><span class="sigdesc">PC of instr being executed</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">0x00</span><span class="sv">ADD</span></td>
-  <td class="cell c-load"><span class="v">0x04</span><span class="sv">LW</span></td>
-  <td class="cell c-stall"><span class="v">0x04</span><span class="sv">LW stall</span></td>
-  <td class="cell c-stall"><span class="v">NOP</span><span class="sv">bubble</span></td>
-  <td class="cell c-branch"><span class="v">0x08</span><span class="sv">BEQ</span></td>
-  <td class="cell c-alu"><span class="v">0x0C</span><span class="sv">XOR</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td>
-  <td class="cell c-alu"><span class="v">0x10</span><span class="sv">SLTU</span></td>
-  <td class="cell c-jal"><span class="v">0x40</span><span class="sv">JAL</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td>
-  <td class="cell c-alu"><span class="v">0x44</span><span class="sv">ADDI</span></td>
-</tr>
+  <td class="lbl-col">EX</td><td class="sig-col"><span class="signame">pc_w / pc</span><span class="sigdesc">PC of instr being executed</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">0x00</span><span class="sv">ADD</span></td><td class="cell c-load"><span class="v">0x04</span><span class="sv">LW</span></td><td class="cell c-branch"><span class="v">0x08</span><span class="sv">BEQ</span></td><td class="cell c-alu"><span class="v">0x0C</span><span class="sv">XOR</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td><td class="cell c-alu"><span class="v">0x10</span><span class="sv">SLTU</span></td><td class="cell c-jal"><span class="v">0x40</span><span class="sv">JAL</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">flushed</span></td><td class="cell c-alu"><span class="v">0x44</span><span class="sv">ADDI</span></td><td class="cell c-alu"><span class="v">0x44</span><span class="sv">ADDI</span></td></tr>
 
 <!-- execute_immediate -->
 <tr class="sig-row">
-  <td class="lbl-col">EX</td>
-  <td class="sig-col"><span class="signame">execute_immediate</span><span class="sigdesc">32-bit imm used in EX</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">reg-reg</span></td>
-  <td class="cell c-load"><span class="v">+16</span><span class="sv">LW offset</span></td>
-  <td class="cell c-load"><span class="v">+16</span><span class="sv">replay</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">NOP</span></td>
-  <td class="cell c-branch"><span class="v">+0x38</span><span class="sv">BEQ offset</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">reg-reg</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-jal"><span class="v">+0x3C</span><span class="sv">JAL offset</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-alu"><span class="v">+5</span><span class="sv">ADDI imm</span></td>
-</tr>
+  <td class="lbl-col">EX</td><td class="sig-col"><span class="signame">execute_immediate</span><span class="sigdesc">32-bit imm used in EX</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-lo"><span class="v">0</span><span class="sv">reg-reg</span></td><td class="cell c-load"><span class="v">+16</span><span class="sv">LW offset</span></td><td class="cell c-branch"><span class="v">+0x38</span><span class="sv">BEQ offset</span></td><td class="cell c-lo"><span class="v">0</span><span class="sv">reg-reg</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-jal"><span class="v">+0x3C</span><span class="sv">JAL offset</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-alu"><span class="v">+5</span><span class="sv">ADDI imm</span></td><td class="cell c-alu"><span class="v">+5</span><span class="sv">ADDI imm</span></td><td class="cell c-alu"><span class="v">+5</span><span class="sv">ADDI imm</span></td></tr>
 
 <!-- alu_operand1 -->
 <tr class="sig-row">
-  <td class="lbl-col">EX</td>
-  <td class="sig-col"><span class="signame">alu_operand1</span><span class="sigdesc">final A input (forwarded)</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">r1_val</span><span class="sv">reg read</span></td>
-  <td class="cell c-load"><span class="v">r4_val</span><span class="sv">base addr</span></td>
-  <td class="cell c-load"><span class="v">r4_val</span><span class="sv">fwd from WB</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">NOP</span></td>
-  <td class="cell c-branch"><span class="v">r2_val</span><span class="sv">cmp A</span></td>
-  <td class="cell c-alu"><span class="v">r4_val</span><span class="sv">XOR A</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-alu"><span class="v">r3_val</span><span class="sv">SLTU A</span></td>
-  <td class="cell c-jal"><span class="v">0x40</span><span class="sv">pc (jal)</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-alu"><span class="v">r1_val</span><span class="sv">ADDI rs1</span></td>
-</tr>
+  <td class="lbl-col">EX</td><td class="sig-col"><span class="signame">alu_operand1</span><span class="sigdesc">final A input (forwarded)</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">r1_val</span><span class="sv">reg read</span></td><td class="cell c-load"><span class="v">r4_val</span><span class="sv">base addr</span></td><td class="cell c-branch"><span class="v">r2_val</span><span class="sv">cmp A</span></td><td class="cell c-alu"><span class="v">r4_val</span><span class="sv">XOR A</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-alu"><span class="v">r3_val</span><span class="sv">SLTU A</span></td><td class="cell c-jal"><span class="v">0x40</span><span class="sv">pc (jal)</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-alu"><span class="v">r1_val</span><span class="sv">ADDI rs1</span></td><td class="cell c-alu"><span class="v">r1_val</span><span class="sv">ADDI rs1</span></td></tr>
 
 <!-- alu_operand2 -->
 <tr class="sig-row">
-  <td class="lbl-col">EX</td>
-  <td class="sig-col"><span class="signame">alu_operand2</span><span class="sigdesc">final B input (forwarded)</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">r2_val</span><span class="sv">reg read</span></td>
-  <td class="cell c-load"><span class="v">+16</span><span class="sv">imm sel=1</span></td>
-  <td class="cell c-load"><span class="v">+16</span><span class="sv">replay</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">NOP</span></td>
-  <td class="cell c-branch"><span class="v">r3_val</span><span class="sv">cmp B</span></td>
-  <td class="cell c-alu"><span class="v">r5_val</span><span class="sv">XOR B</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-alu"><span class="v">r4_val</span><span class="sv">SLTU B</span></td>
-  <td class="cell c-jal"><span class="v">+0x3C</span><span class="sv">imm offset</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-alu"><span class="v">+5</span><span class="sv">imm sel=1</span></td>
-</tr>
+  <td class="lbl-col">EX</td><td class="sig-col"><span class="signame">alu_operand2</span><span class="sigdesc">final B input (forwarded)</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">r2_val</span><span class="sv">reg read</span></td><td class="cell c-load"><span class="v">+16</span><span class="sv">imm sel=1</span></td><td class="cell c-branch"><span class="v">r3_val</span><span class="sv">cmp B</span></td><td class="cell c-alu"><span class="v">r5_val</span><span class="sv">XOR B</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-alu"><span class="v">r4_val</span><span class="sv">SLTU B</span></td><td class="cell c-jal"><span class="v">+0x3C</span><span class="sv">imm offset</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-alu"><span class="v">+5</span><span class="sv">imm sel=1</span></td><td class="cell c-alu"><span class="v">+5</span><span class="sv">imm sel=1</span></td></tr>
 
 <!-- ex_result -->
 <tr class="sig-row">
-  <td class="lbl-col">EX</td>
-  <td class="sig-col"><span class="signame">ex_result</span><span class="sigdesc">ALU calculation result</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">r1+r2</span><span class="sv">ADD result</span></td>
-  <td class="cell c-load"><span class="v">r4+16</span><span class="sv">load addr</span></td>
-  <td class="cell c-load"><span class="v">r4+16</span><span class="sv">replayed</span></td>
-  <td class="cell c-lo"><span class="v">─</span><span class="sv">NOP</span></td>
-  <td class="cell c-branch"><span class="v">cmp</span><span class="sv">diff=0?</span></td>
-  <td class="cell c-alu"><span class="v">r4^r5</span><span class="sv">XOR</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">r3&lt;r4?</span><span class="sv">SLTU</span></td>
-  <td class="cell c-jal"><span class="v">0x44</span><span class="sv">pc+4 link</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">r1+5</span><span class="sv">ADDI</span></td>
-</tr>
+  <td class="lbl-col">EX</td><td class="sig-col"><span class="signame">ex_result</span><span class="sigdesc">ALU calculation result</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">r1+r2</span><span class="sv">ADD result</span></td><td class="cell c-load"><span class="v">r4+16</span><span class="sv">load addr</span></td><td class="cell c-branch"><span class="v">cmp</span><span class="sv">diff=0?</span></td><td class="cell c-alu"><span class="v">r4^r5</span><span class="sv">XOR</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-alu"><span class="v">r3&lt;r4?</span><span class="sv">SLTU</span></td><td class="cell c-jal"><span class="v">0x44</span><span class="sv">pc+4 link</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-alu"><span class="v">r1+5</span><span class="sv">ADDI</span></td><td class="cell c-alu"><span class="v">r1+5</span><span class="sv">ADDI</span></td></tr>
 
 <!-- next_pc -->
 <tr class="sig-row">
-  <td class="lbl-col">EX</td>
-  <td class="sig-col"><span class="signame">next_pc</span><span class="sigdesc">target vs PC+4</span></td>
-  <td class="cell c-lo"><span class="v">0x04</span><span class="sv">+4</span></td>
-  <td class="cell c-lo"><span class="v">0x08</span><span class="sv">+4</span></td>
-  <td class="cell c-lo"><span class="v">0x0C</span><span class="sv">+4</span></td>
-  <td class="cell c-lo"><span class="v">0x08</span><span class="sv">stall</span></td>
-  <td class="cell c-lo"><span class="v">0x0C</span><span class="sv">+4</span></td>
-  <td class="cell c-lo"><span class="v">0x10</span><span class="sv">+4</span></td>
-  <td class="cell c-branch"><span class="v">0x40</span><span class="sv">TAKEN!</span></td>
-  <td class="cell c-lo"><span class="v">0x44</span><span class="sv">+4</span></td>
-  <td class="cell c-lo"><span class="v">0x48</span><span class="sv">+4</span></td>
-  <td class="cell c-lo"><span class="v">0x44</span><span class="sv">+4</span></td>
-  <td class="cell c-jal"><span class="v">0x80</span><span class="sv">JAL jump!</span></td>
-  <td class="cell c-lo"><span class="v">0x84</span><span class="sv">+4</span></td>
-  <td class="cell c-lo"><span class="v">0x88</span><span class="sv">+4</span></td>
-  <td class="cell c-lo"><span class="v">0x8C</span><span class="sv">+4</span></td>
-</tr>
+  <td class="lbl-col">EX</td><td class="sig-col"><span class="signame">next_pc</span><span class="sigdesc">target vs PC+4</span></td><td class="cell c-lo"><span class="v">0x04</span><span class="sv">+4</span></td><td class="cell c-lo"><span class="v">0x08</span><span class="sv">+4</span></td><td class="cell c-lo"><span class="v">0x0C</span><span class="sv">+4</span></td><td class="cell c-lo"><span class="v">0x08</span><span class="sv">+4</span></td><td class="cell c-branch"><span class="v">0x40</span><span class="sv">TAKEN!</span></td><td class="cell c-lo"><span class="v">0x44</span><span class="sv">+4</span></td><td class="cell c-lo"><span class="v">0x48</span><span class="sv">+4</span></td><td class="cell c-lo"><span class="v">0x44</span><span class="sv">+4</span></td><td class="cell c-jal"><span class="v">0x80</span><span class="sv">JAL jump!</span></td><td class="cell c-lo"><span class="v">0x84</span><span class="sv">+4</span></td><td class="cell c-lo"><span class="v">0x88</span><span class="sv">+4</span></td><td class="cell c-lo"><span class="v">0x8C</span><span class="sv">+4</span></td><td class="cell c-lo"><span class="v">0x8C</span><span class="sv">+4</span></td></tr>
 
 <!-- branch_taken -->
 <tr class="sig-row">
-  <td class="lbl-col">EX</td>
-  <td class="sig-col"><span class="signame">branch_taken</span><span class="sigdesc">1=branch condition met</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-branch"><span class="v">1</span><span class="sv">BEQ met!</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-</tr>
+  <td class="lbl-col">EX</td><td class="sig-col"><span class="signame">branch_taken</span><span class="sigdesc">1=branch condition met</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-branch"><span class="v">1</span><span class="sv">BEQ met!</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td></tr>
 
 <!-- branch_stall -->
 <tr class="sig-row">
-  <td class="lbl-col">EX/PIPE</td>
-  <td class="sig-col"><span class="signame">branch_stall</span><span class="sigdesc">1-cycle redirect flag</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-branch"><span class="v">1</span><span class="sv">wb_branch</span></td>
-  <td class="cell c-branch"><span class="v">1</span><span class="sv">wb_br_nxt</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-</tr>
+  <td class="lbl-col">EX/PIPE</td><td class="sig-col"><span class="signame">branch_stall</span><span class="sigdesc">1-cycle redirect flag</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-branch"><span class="v">1</span><span class="sv">wb_branch</span></td><td class="cell c-branch"><span class="v">1</span><span class="sv">wb_br_nxt</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td></tr>
 
 <!-- ══════════════════════════════════════════════════════
      WRITE-BACK STAGE SIGNALS
      ══════════════════════════════════════════════════════ -->
-<tr class="section-hdr s-wb"><td colspan="16">WB — Write-Back Stage</td></tr>
+<tr class="section-hdr s-wb"><td colspan="15">WB — Write-Back Stage</td></tr>
 
 <!-- Instruction in WB -->
 <tr class="sig-row">
-  <td class="lbl-col">WB</td>
-  <td class="sig-col"><span class="signame">instr in WB</span><span class="sigdesc">instruction retiring this cycle</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">ADD</span><span class="sv">retiring</span></td>
-  <td class="cell c-load"><span class="v">LW</span><span class="sv">wait dmem</span></td>
-  <td class="cell c-load"><span class="v">LW</span><span class="sv">data ready</span></td>
-  <td class="cell c-stall"><span class="v">NOP</span><span class="sv">no write</span></td>
-  <td class="cell c-branch"><span class="v">BEQ</span><span class="sv">no WB</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">discarded</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">discarded</span></td>
-  <td class="cell c-alu"><span class="v">XOR</span><span class="sv">retiring</span></td>
-  <td class="cell c-nop"><span class="v">NOP</span><span class="sv">discarded</span></td>
-  <td class="cell c-alu"><span class="v">SLTU</span><span class="sv">retiring</span></td>
-  <td class="cell c-jal"><span class="v">JAL</span><span class="sv">retiring</span></td>
-</tr>
+  <td class="lbl-col">WB</td><td class="sig-col"><span class="signame">instr in WB</span><span class="sigdesc">instruction retiring this cycle</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">ADD</span><span class="sv">retiring</span></td><td class="cell c-load"><span class="v">LW</span><span class="sv">data ready</span></td><td class="cell c-branch"><span class="v">BEQ</span><span class="sv">no WB</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">discarded</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">discarded</span></td><td class="cell c-alu"><span class="v">XOR</span><span class="sv">retiring</span></td><td class="cell c-nop"><span class="v">NOP</span><span class="sv">discarded</span></td><td class="cell c-alu"><span class="v">SLTU</span><span class="sv">retiring</span></td><td class="cell c-jal"><span class="v">JAL</span><span class="sv">retiring</span></td><td class="cell c-jal"><span class="v">JAL</span><span class="sv">retiring</span></td></tr>
 
 <!-- wb_result -->
 <tr class="sig-row">
-  <td class="lbl-col">WB</td>
-  <td class="sig-col"><span class="signame">wb_result</span><span class="sigdesc">ALU result in WB stage</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">r1+r2</span><span class="sv">ADD</span></td>
-  <td class="cell c-load"><span class="v">r4+16</span><span class="sv">addr</span></td>
-  <td class="cell c-load"><span class="v">MEM[a]</span><span class="sv">data</span></td>
-  <td class="cell c-lo"><span class="v">─</span><span class="sv">NOP</span></td>
-  <td class="cell c-lo"><span class="v">─</span><span class="sv">BEQ</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">r4^r5</span><span class="sv">XOR</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-alu"><span class="v">r3&lt;r4</span><span class="sv">SLTU</span></td>
-  <td class="cell c-jal"><span class="v">0x44</span><span class="sv">link</span></td>
-</tr>
+  <td class="lbl-col">WB</td><td class="sig-col"><span class="signame">wb_result</span><span class="sigdesc">ALU result in WB stage</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-alu"><span class="v">r1+r2</span><span class="sv">ADD</span></td><td class="cell c-load"><span class="v">MEM[a]</span><span class="sv">data</span></td><td class="cell c-lo"><span class="v">─</span><span class="sv">BEQ</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-alu"><span class="v">r4^r5</span><span class="sv">XOR</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-alu"><span class="v">r3&lt;r4</span><span class="sv">SLTU</span></td><td class="cell c-jal"><span class="v">0x44</span><span class="sv">link</span></td><td class="cell c-jal"><span class="v">0x44</span><span class="sv">link</span></td></tr>
 
 <!-- wb_read_data -->
 <tr class="sig-row">
-  <td class="lbl-col">WB</td>
-  <td class="sig-col"><span class="signame">wb_read_data</span><span class="sigdesc">extracted dmem data</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-empty"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-load"><span class="v">pending</span><span class="sv">dmem lat</span></td>
-  <td class="cell c-load"><span class="v">MEM[a]</span><span class="sv">valid!</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-</tr>
+  <td class="lbl-col">WB</td><td class="sig-col"><span class="signame">wb_read_data</span><span class="sigdesc">extracted dmem data</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-empty"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-load"><span class="v">MEM[a]</span><span class="sv">valid!</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td></tr>
 
 <!-- wb_dest_reg_sel -->
 <tr class="sig-row">
-  <td class="lbl-col">WB</td>
-  <td class="sig-col"><span class="signame">wb_dest_reg_sel</span><span class="sigdesc">rd index for final write</span></td>
-  <td class="cell c-lo"><span class="v">x0</span></td>
-  <td class="cell c-lo"><span class="v">x0</span></td>
-  <td class="cell c-lo"><span class="v">x0</span></td>
-  <td class="cell c-alu"><span class="v">x3</span><span class="sv">ADD rd</span></td>
-  <td class="cell c-load"><span class="v">x5</span><span class="sv">LW rd</span></td>
-  <td class="cell c-load"><span class="v">x5</span><span class="sv">LW rd</span></td>
-  <td class="cell c-lo"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-lo"><span class="v">x0</span><span class="sv">BEQ</span></td>
-  <td class="cell c-lo"><span class="v">x0</span></td>
-  <td class="cell c-lo"><span class="v">x0</span></td>
-  <td class="cell c-alu"><span class="v">x6</span><span class="sv">XOR rd</span></td>
-  <td class="cell c-lo"><span class="v">x0</span><span class="sv">NOP</span></td>
-  <td class="cell c-alu"><span class="v">x7</span><span class="sv">SLTU rd</span></td>
-  <td class="cell c-jal"><span class="v">x1</span><span class="sv">JAL link</span></td>
-</tr>
+  <td class="lbl-col">WB</td><td class="sig-col"><span class="signame">wb_dest_reg_sel</span><span class="sigdesc">rd index for final write</span></td><td class="cell c-lo"><span class="v">x0</span></td><td class="cell c-lo"><span class="v">x0</span></td><td class="cell c-lo"><span class="v">x0</span></td><td class="cell c-alu"><span class="v">x3</span><span class="sv">ADD rd</span></td><td class="cell c-load"><span class="v">x5</span><span class="sv">LW rd</span></td><td class="cell c-lo"><span class="v">x0</span><span class="sv">BEQ</span></td><td class="cell c-lo"><span class="v">x0</span></td><td class="cell c-lo"><span class="v">x0</span></td><td class="cell c-alu"><span class="v">x6</span><span class="sv">XOR rd</span></td><td class="cell c-lo"><span class="v">x0</span><span class="sv">NOP</span></td><td class="cell c-alu"><span class="v">x7</span><span class="sv">SLTU rd</span></td><td class="cell c-jal"><span class="v">x1</span><span class="sv">JAL link</span></td><td class="cell c-jal"><span class="v">x1</span><span class="sv">JAL link</span></td></tr>
 
 <!-- wb_alu_to_reg -->
 <tr class="sig-row">
-  <td class="lbl-col">WB</td>
-  <td class="sig-col"><span class="signame">wb_alu_to_reg</span><span class="sigdesc">RF write-enable flag</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">ADD→x3</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">LW en</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">LW→x5</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">NOP</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">BEQ</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">XOR→x6</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">NOP</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">SLTU→x7</span></td>
-  <td class="cell c-hi"><span class="v">1</span><span class="sv">JAL→x1</span></td>
-</tr>
+  <td class="lbl-col">WB</td><td class="sig-col"><span class="signame">wb_alu_to_reg</span><span class="sigdesc">RF write-enable flag</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">ADD→x3</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">LW→x5</span></td><td class="cell c-lo"><span class="v">0</span><span class="sv">BEQ</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">XOR→x6</span></td><td class="cell c-lo"><span class="v">0</span><span class="sv">NOP</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">SLTU→x7</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">JAL→x1</span></td><td class="cell c-hi"><span class="v">1</span><span class="sv">JAL→x1</span></td></tr>
 
 <!-- wb_mem_to_reg -->
 <tr class="sig-row">
-  <td class="lbl-col">WB</td>
-  <td class="sig-col"><span class="signame">wb_mem_to_reg</span><span class="sigdesc">1=MEM data, 0=ALU result</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">ALU path</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-load"><span class="v">1</span><span class="sv">MEM path!</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-</tr>
+  <td class="lbl-col">WB</td><td class="sig-col"><span class="signame">wb_mem_to_reg</span><span class="sigdesc">1=MEM data, 0=ALU result</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span><span class="sv">ALU path</span></td><td class="cell c-load"><span class="v">1</span><span class="sv">MEM path!</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td></tr>
 
 <!-- wb_write_address -->
 <tr class="sig-row">
-  <td class="lbl-col">WB</td>
-  <td class="sig-col"><span class="signame">wb_write_address</span><span class="sigdesc">targeted dmem addr (SW)</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-store"><span class="v">r5+imm</span><span class="sv">SW addr</span></td>
-</tr>
+  <td class="lbl-col">WB</td><td class="sig-col"><span class="signame">wb_write_address</span><span class="sigdesc">targeted dmem addr (SW)</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-store"><span class="v">r5+imm</span><span class="sv">SW addr</span></td><td class="cell c-store"><span class="v">r5+imm</span><span class="sv">SW addr</span></td></tr>
 
 <!-- wb_write_data -->
 <tr class="sig-row">
-  <td class="lbl-col">WB</td>
-  <td class="sig-col"><span class="signame">wb_write_data</span><span class="sigdesc">payload written to dmem</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-lo"><span class="v">─</span></td>
-  <td class="cell c-store"><span class="v">r6_val</span><span class="sv">SW data</span></td>
-</tr>
+  <td class="lbl-col">WB</td><td class="sig-col"><span class="signame">wb_write_data</span><span class="sigdesc">payload written to dmem</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-lo"><span class="v">─</span></td><td class="cell c-store"><span class="v">r6_val</span><span class="sv">SW data</span></td><td class="cell c-store"><span class="v">r6_val</span><span class="sv">SW data</span></td></tr>
 
 <!-- wb_write_byte -->
 <tr class="sig-row">
-  <td class="lbl-col">WB</td>
-  <td class="sig-col"><span class="signame">wb_write_byte</span><span class="sigdesc">4-bit byte-enable strobe</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-lo"><span class="v">0x0</span></td>
-  <td class="cell c-store"><span class="v">0xF</span><span class="sv">full word</span></td>
-</tr>
+  <td class="lbl-col">WB</td><td class="sig-col"><span class="signame">wb_write_byte</span><span class="sigdesc">4-bit byte-enable strobe</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-lo"><span class="v">0x0</span></td><td class="cell c-store"><span class="v">0xF</span><span class="sv">full word</span></td><td class="cell c-store"><span class="v">0xF</span><span class="sv">full word</span></td></tr>
 
 <!-- wb_stall -->
 <tr class="sig-row">
-  <td class="lbl-col">WB/PIPE</td>
-  <td class="sig-col"><span class="signame">wb_stall</span><span class="sigdesc">2-cycle branch stall out</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-branch"><span class="v">1</span><span class="sv">cycle 1</span></td>
-  <td class="cell c-branch"><span class="v">1</span><span class="sv">cycle 2</span></td>
-  <td class="cell c-lo"><span class="v">0</span><span class="sv">clear</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-  <td class="cell c-lo"><span class="v">0</span></td>
-</tr>
+  <td class="lbl-col">WB/PIPE</td><td class="sig-col"><span class="signame">wb_stall</span><span class="sigdesc">2-cycle branch stall out</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-branch"><span class="v">1</span><span class="sv">cycle 1</span></td><td class="cell c-branch"><span class="v">1</span><span class="sv">cycle 2</span></td><td class="cell c-lo"><span class="v">0</span><span class="sv">clear</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td><td class="cell c-lo"><span class="v">0</span></td></tr>
 
 <!-- event annotation -->
 <tr class="event-row">
-  <td class="lbl-col">event</td>
-  <td class="sig-col">scenario notes</td>
-  <td class="ev-norm">normal<br>flow</td>
-  <td class="ev-norm">normal<br>flow</td>
-  <td class="ev-norm">normal<br>flow</td>
-  <td class="ev-stall">stall_read=1<br>NOP inject<br>PC frozen</td>
-  <td class="ev-stall">stall clears<br>LW replay</td>
-  <td class="">LW retires<br>mem_to_reg=1<br>MEM→RF</td>
-  <td class="ev-branch">branch_taken=1<br>next_pc=0x40<br>redirect!</td>
-  <td class="ev-branch">wb_stall=1<br>flush C8<br>NOP in EX</td>
-  <td class="ev-branch">wb_stall=1<br>flush C9<br>NOP in EX</td>
-  <td class="">resume<br>at 0x40<br>SLTU</td>
-  <td class="ev-jal">JAL exec<br>next_pc=0x80<br>link→x1</td>
-  <td class="ev-jal">JAL flush<br>NOP instr</td>
-  <td class="ev-sw">ADDI ret<br>SW in EX</td>
-  <td class="ev-sw">SW retires<br>dmem write<br>wb_wr_byte=F</td>
-</tr>
+  <td class="lbl-col">event</td><td class="sig-col">scenario notes</td><td class="ev-norm">normal<br>flow</td><td class="ev-norm">normal<br>flow</td><td class="ev-norm">normal<br>flow</td><td class="ev-norm">LW EX<br>ADD retires</td><td class="ev-branch">branch_taken=1<br>next_pc=0x40<br>redirect!</td><td class="ev-branch">wb_stall=1<br>flush C8<br>NOP in EX</td><td class="ev-branch">wb_stall=1<br>flush C8<br>NOP in EX</td><td class="">resume<br>at 0x40<br>SLTU</td><td class="ev-jal">JAL exec<br>next_pc=0x80<br>link→x1</td><td class="ev-jal">JAL flush<br>NOP instr</td><td class="ev-sw">ADDI ret<br>SW in EX</td><td class="ev-sw">SW retires<br>dmem write<br>wb_wr_byte=F</td><td class="ev-sw">SW retires<br>dmem write<br>wb_wr_byte=F</td></tr>
 
 </tbody>
 </table>
@@ -1066,11 +503,10 @@
 
 <div class="footnotes">
   <div class="fn-block"><span class="tag t-norm">C1–C3</span> Normal sequential flow: ADD (R-type) → LW (I-type load) → BEQ (B-type branch) fill IF/ID/EX/WB in lockstep. No hazards. <code>wb_alu_to_reg=1</code> fires at C4 when ADD reaches WB; <code>wb_dest_reg_sel=x3</code>.</div>
-  <div class="fn-block"><span class="tag t-stall">C4 stall</span> Load-use data hazard: LW in EX needs one extra cycle for data memory. <code>stall_read=1</code> freezes <code>fetch_pc</code> and injects NOP into the ID stage. LW is replayed in EX at C5. At C6 <code>wb_mem_to_reg=1</code> routes <code>wb_read_data</code> (dmem output) into the register file instead of the ALU result.</div>
-  <div class="fn-block"><span class="tag t-branch">C7–C9 branch</span> BEQ evaluates at C7, condition is true → <code>branch_taken=1</code>, <code>next_pc=0x40</code>. <code>branch_stall</code> asserts for 2 cycles (C8–C9) driven by <code>wb_branch_i</code> / <code>wb_branch_nxt_i</code>. Both mis-fetched instructions are replaced with NOPs and discarded — <code>wb_alu_to_reg=0</code> on both, no RF write occurs. <code>wb_stall=1</code> for both cycles prevents spurious register writes from WB.</div>
-  <div class="fn-block"><span class="tag t-jal">C11–C12 JAL</span> JAL executes at C11, computes <code>next_pc = pc + offset = 0x80</code>, writes return address <code>pc+4 = 0x44</code> to <code>x1</code> (link register). One NOP bubble flushed at C12. Pipeline resumes from 0x80.</div>
-  <div class="fn-block"><span class="tag t-sw">C14 SW</span> Store word: <code>wb_mem_write=1</code> drives <code>wb_write_address = r5+imm</code>, <code>wb_write_data = r6_val</code>, <code>wb_write_byte = 0xF</code> (full 32-bit word). No <code>wb_alu_to_reg</code> — store instructions never write the register file.</div>
-  <div class="fn-block"><span class="tag t-wb">Forwarding</span> At C5, LW operand forwarded from WB back to EX via the <code>reg_rdata1/2</code> mux: <code>(!wb_stall &amp;&amp; wb_alu_to_reg &amp;&amp; wb_dest_reg_sel == src)</code> selects <code>wb_read_data</code> or <code>wb_result</code> over the stale register-file read.</div>
+    <div class="fn-block"><span class="tag t-branch">C6–C8 branch</span> BEQ evaluates at C7, condition is true → <code>branch_taken=1</code>, <code>next_pc=0x40</code>. <code>branch_stall</code> asserts for 2 cycles (C7–C8) driven by <code>wb_branch_i</code> / <code>wb_branch_nxt_i</code>. Both mis-fetched instructions are replaced with NOPs and discarded — <code>wb_alu_to_reg=0</code> on both, no RF write occurs. <code>wb_stall=1</code> for both cycles prevents spurious register writes from WB.</div>
+  <div class="fn-block"><span class="tag t-jal">C10–C11 JAL</span> JAL executes at C11, computes <code>next_pc = pc + offset = 0x80</code>, writes return address <code>pc+4 = 0x44</code> to <code>x1</code> (link register). One NOP bubble flushed at C12. Pipeline resumes from 0x80.</div>
+  <div class="fn-block"><span class="tag t-sw">C13 SW</span> Store word: <code>wb_mem_write=1</code> drives <code>wb_write_address = r5+imm</code>, <code>wb_write_data = r6_val</code>, <code>wb_write_byte = 0xF</code> (full 32-bit word). No <code>wb_alu_to_reg</code> — store instructions never write the register file.</div>
+  <div class="fn-block"><span class="tag t-wb">Forwarding</span> At C4, LW operand forwarded from WB back to EX via the <code>reg_rdata1/2</code> mux: <code>(!wb_stall &amp;&amp; wb_alu_to_reg &amp;&amp; wb_dest_reg_sel == src)</code> selects <code>wb_read_data</code> or <code>wb_result</code> over the stale register-file read.</div>
 </div>
 
 </body>
