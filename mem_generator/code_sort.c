@@ -27,7 +27,4 @@ int main()
     } while (swapped == 1);
 
     return arr[0];
-    // for(k=0; k<m; k++){
-    //     printf("%d ", arr[k]);
-    // }
 }

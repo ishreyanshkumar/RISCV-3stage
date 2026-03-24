@@ -8,14 +8,13 @@ module instr_mem (
 );
 
 	(* ram_style = "block" *)
-	reg [31:0] imem [0:1023];
+	reg [31:0] imem [0:1023]; // 1024 x 32-bit
 
-	// Initialize instruction memory from hex file
 	initial begin
     	$readmemh("../mem_generator/imem_dmem/imem.hex", imem);
 	end
 
-	// Synchronous instruction fetch (word-aligned PC)
+	// Synchronous word-aligned fetch
 	always @(posedge clk) begin
     	instr <= imem[pc[11:2]];
 	end
@@ -39,31 +38,22 @@ module data_mem (
 	input     	we,
 	input  [31:0] waddr,
 	input  [31:0] wdata,
-	input  [3:0]  wstrb
+	input  [3:0]  wstrb       // Byte write strobes
 );
 
 	(* ram_style = "block" *)
 	reg [31:0] dmem [0:1023];
 
-	// Decode byte address to word index
 	wire [9:0] rindex = raddr[11:2];
 	wire [9:0] windex = waddr[11:2];
 
-	// Initialize data memory from hex file
 	initial begin
     	$readmemh("../mem_generator/imem_dmem/dmem.hex", dmem);
 	end
 
-	// ----------------------------------------------------------------------------
-	// Read & Write Logic (Synchronous)
-	// 
-	// - Support byte-wise writes using wstrb
-	// - Provide 1-cycle read latency
-	// - Handle same-cycle read-after-write using byte-level forwarding
-	// ----------------------------------------------------------------------------
-
+	// Synchronous read/write with byte-level RAW forwarding
 	always @(posedge clk) begin
-    	// ---- WRITE ----
+    	// Write
     	if (we) begin
         	if (wstrb[0]) dmem[windex][7:0]   <= wdata[7:0];
         	if (wstrb[1]) dmem[windex][15:8]  <= wdata[15:8];
@@ -71,10 +61,9 @@ module data_mem (
         	if (wstrb[3]) dmem[windex][31:24] <= wdata[31:24];
     	end
 
-    	// ---- READ (1-cycle latency, RAW-safe) ----
+    	// Read (1-cycle latency, RAW-safe)
     	if (re) begin
         	if (we && (rindex == windex)) begin
-            	// Byte-level forwarding
             	rdata[7:0]   <= wstrb[0] ? wdata[7:0]   : dmem[rindex][7:0];
             	rdata[15:8]  <= wstrb[1] ? wdata[15:8]  : dmem[rindex][15:8];
             	rdata[23:16] <= wstrb[2] ? wdata[23:16] : dmem[rindex][23:16];
@@ -84,7 +73,6 @@ module data_mem (
             	rdata <= dmem[rindex];
         	end
     	end
-    	// else: rdata holds value
 	end
 
 endmodule

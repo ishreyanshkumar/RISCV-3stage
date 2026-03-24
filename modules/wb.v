@@ -1,5 +1,7 @@
 // ----------------------------------------------------------------------------
 // Stage 3: Write Back
+// Handles store data formatting, load data extraction, branch stall
+// generation, and instruction fetch PC feedback.
 // ----------------------------------------------------------------------------
 module wb 
 #(
@@ -13,15 +15,15 @@ module wb
     input [31:0] fetch_pc_i,
 
     input        wb_branch_i,
-    input        wb_mem_to_reg_i,
-    input        mem_write_i,
+    input        wb_mem_to_reg_i,   // Load-to-register flag
+    input        mem_write_i,       // Store flag
 
-    input [31:0] write_address_i,
-    input [31:0] alu_operand2_i,
-    input [2:0]  alu_operation_i,
+    input [31:0] write_address_i,   // Store target address
+    input [31:0] alu_operand2_i,    // Store data source
+    input [2:0]  alu_operation_i,   // Store width (SB/SH/SW)
 
-    input [2:0]  wb_alu_operation_i,
-    input [1:0]  wb_read_address_i,
+    input [2:0]  wb_alu_operation_i, // Load type (LB/LH/LW/LBU/LHU)
+    input [1:0]  wb_read_address_i,  // Byte/half alignment offset
 
     input [31:0] dmem_read_data_i,
     input        dmem_write_valid_i,
@@ -35,16 +37,16 @@ module wb
     output reg [3:0]  wb_write_byte_o,
     output reg [31:0] wb_read_data_o,
     output reg [31:0] inst_fetch_pc_o,
-    output reg wb_stall_first_o,
-    output reg wb_stall_second_o
+    output reg wb_stall_first_o,       // Branch detected this cycle
+    output reg wb_stall_second_o       // Branch detected previous cycle
+
 );
 
-// import "opcode.vh" for OPCODES
 `include "opcode.vh"
 
 
 // ----------------------------------------------------------------------------
-// Instruction Memory Interface (Fetch PC generation)
+// Instruction Memory Interface
 // ----------------------------------------------------------------------------
 
 assign inst_mem_address_o  = fetch_pc_i;
@@ -60,27 +62,19 @@ assign wb_stall_o = wb_stall_first_o || wb_stall_second_o;
 // Instruction Fetch PC Update
 // ----------------------------------------------------------------------------
 
-// Drive instruction memory address using the current fetch PC
-// Instruction fetch must be disabled when a read stall is asserted
-
-always @(posedge clk or negedge reset) begin
-    if (!reset)
-        inst_fetch_pc_o <= RESET; // reset to instruction fetch program counter
+always @(posedge clk or posedge reset) begin
+    if (reset)
+        inst_fetch_pc_o <= RESET;
     else if (!stall_read_i)
-        inst_fetch_pc_o <= fetch_pc_i; // fetch the next instruction
+        inst_fetch_pc_o <= fetch_pc_i;
 end
 
 // ----------------------------------------------------------------------------
-// Branch Stall Generation
+// Branch Stall Generation (2-cycle bubble)
 // ----------------------------------------------------------------------------
 
-// Generate two-cycle stall for branch instructions
-// - First cycle: stall when branch is detected
-// - Second cycle: extend stall by one more cycle
-// - Stall must not advance when a pending load has not completed
-
-always @(posedge clk or negedge reset) begin
-    if (!reset) begin
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
         wb_stall_first_o  <= 1'b0;
         wb_stall_second_o <= 1'b0;
     end
@@ -92,16 +86,11 @@ always @(posedge clk or negedge reset) begin
 end
 
 // ----------------------------------------------------------------------------
-// Data Memory Write (Store Instructions)
+// Store Data Formatting (SB/SH/SW)
 // ----------------------------------------------------------------------------
 
-// Prepare data memory write signals for store instructions
-// - Generate write address
-// - Generate write data with proper byte replication
-// - Generate byte-enable signals based on address alignment
-
-always @(posedge clk or negedge reset) begin
-    if (!reset) begin
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
         wb_write_address_o <= 32'h0;
         wb_write_byte_o    <= 4'h0;
         wb_write_data_o    <= 32'h0;
@@ -136,17 +125,12 @@ always @(posedge clk or negedge reset) begin
 end
 
 // ----------------------------------------------------------------------------
-// Data Memory Read (Load Instructions)
+// Load Data Extraction (LB/LH/LW/LBU/LHU)
 // ----------------------------------------------------------------------------
-
-// Format load data based on load type
-// - Apply sign-extension or zero-extension
-// - Select correct byte or halfword using read address bits
-
 
 always @* begin
     case (wb_alu_operation_i)
-        LB: begin // Load byte
+        LB: begin
             case (wb_read_address_i)
                 2'b00: wb_read_data_o = {{24{dmem_read_data_i[7]}},  dmem_read_data_i[7:0]};
                 2'b01: wb_read_data_o = {{24{dmem_read_data_i[15]}}, dmem_read_data_i[15:8]};
@@ -155,15 +139,14 @@ always @* begin
             endcase
         end
 
-        // load halfword
         LH: wb_read_data_o =
             wb_read_address_i[1]
             ? {{16{dmem_read_data_i[31]}}, dmem_read_data_i[31:16]}
             : {{16{dmem_read_data_i[15]}}, dmem_read_data_i[15:0]};
 
-        LW: wb_read_data_o = dmem_read_data_i; // load word
+        LW: wb_read_data_o = dmem_read_data_i;
 
-        LBU: begin // load byte unsigned
+        LBU: begin
             case (wb_read_address_i)
                 2'b00: wb_read_data_o = {24'h0, dmem_read_data_i[7:0]};
                 2'b01: wb_read_data_o = {24'h0, dmem_read_data_i[15:8]};
@@ -172,7 +155,6 @@ always @* begin
             endcase
         end
 
-        // load halfword unsigned
         LHU: wb_read_data_o =
             wb_read_address_i[1]
             ? {16'h0, dmem_read_data_i[31:16]}
